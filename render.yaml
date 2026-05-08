@@ -1,5 +1,5 @@
 services:
-  # Backend Service
+  # Backend Service (Node.js)
   - type: web
     name: task-manager-api
     env: node
@@ -17,14 +17,12 @@ services:
       - key: JWT_SECRET
         sync: false # Set this in Render Dashboard
 
-  # Frontend Service
-  - type: web
+  # Frontend Service (Static Site)
+  - type: static_site
     name: task-manager-client
-    env: static
-    plan: free
     rootDir: frontend
     buildCommand: npm install && npm run build
-    staticPublishPath: dist
+    publishPath: dist
     headers:
       - path: /*
         name: Cache-Control
