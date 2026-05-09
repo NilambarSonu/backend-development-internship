@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Clock } from 'lucide-react';
-import api from '../api';
+import axios from 'axios';
 import BackendContext from '../contexts/BackendContext';
 
 const BackendWaker = ({ children }) => {
@@ -12,10 +12,16 @@ const BackendWaker = ({ children }) => {
     let timeout;
     const startTime = Date.now();
     const MAX_WAIT_TIME = 60000; // 60 seconds max
+    
+    // Get the API URL - use full URL for health check
+    const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000/api/v1';
+    const healthUrl = `${apiUrl}/health`;
+    
+    console.log('🔍 Attempting to connect to:', healthUrl);
 
     const pingBackend = async () => {
       try {
-        const response = await api.get('health', { timeout: 8000 });
+        const response = await axios.get(healthUrl, { timeout: 8000 });
         if (response.status === 200) {
           console.log('✅ Backend connected successfully!');
           setIsAwake(true);
