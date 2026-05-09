@@ -26,6 +26,11 @@ swaggerDocs(app);
 app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/tasks', taskRoutes);
 
+// Health Check Route
+app.get('/api/v1/health', (req, res) => {
+  res.status(200).json({ status: 'ok', message: 'Backend is awake!' });
+});
+
 // Base route
 app.get('/', (req, res) => {
   res.send('API is running... Check /api-docs for Swagger documentation.');
