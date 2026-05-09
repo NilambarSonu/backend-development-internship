@@ -15,7 +15,7 @@ const BackendWaker = ({ children }) => {
 
     const pingBackend = async () => {
       try {
-        const response = await api.get('/health', { timeout: 8000 });
+        const response = await api.get('health', { timeout: 8000 });
         if (response.status === 200) {
           console.log('✅ Backend connected successfully!');
           setIsAwake(true);
