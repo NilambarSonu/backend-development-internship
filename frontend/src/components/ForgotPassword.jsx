@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../api';
+import { useBackendStatus } from '../contexts/BackendContext';
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const { isAwake } = useBackendStatus();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -87,20 +89,21 @@ const ForgotPassword = () => {
                 placeholder="Email Address"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                disabled={!isAwake}
                 required
                 style={{
-                  width: '100%', padding: '16px', background: 'rgba(255, 255, 255, 0.03)', border: '1px solid rgba(255, 255, 255, 0.1)', borderRadius: '8px', color: '#fff', fontSize: '14px', outline: 'none', boxSizing: 'border-box'
+                  width: '100%', padding: '16px', background: 'rgba(255, 255, 255, 0.03)', border: '1px solid rgba(255, 255, 255, 0.1)', borderRadius: '8px', color: '#fff', fontSize: '14px', outline: 'none', boxSizing: 'border-box', opacity: !isAwake ? 0.5 : 1, cursor: !isAwake ? 'not-allowed' : 'text'
                 }}
               />
 
               <button
                 type="submit"
-                disabled={loading}
+                disabled={loading || !isAwake}
                 style={{
-                  width: '100%', padding: '14px', background: 'linear-gradient(90deg, #7c3aed, #9333ea)', border: 'none', borderRadius: '8px', color: '#fff', fontSize: '15px', fontWeight: '600', cursor: loading ? 'not-allowed' : 'pointer', transition: 'opacity 0.2s', marginTop: '12px'
+                  width: '100%', padding: '14px', background: 'linear-gradient(90deg, #7c3aed, #9333ea)', border: 'none', borderRadius: '8px', color: '#fff', fontSize: '15px', fontWeight: '600', cursor: (loading || !isAwake) ? 'not-allowed' : 'pointer', transition: 'opacity 0.2s', marginTop: '12px', opacity: (loading || !isAwake) ? 0.6 : 1
                 }}
               >
-                {loading ? 'Sending...' : 'Send Link'}
+                {!isAwake ? 'Waiting for server...' : loading ? 'Sending...' : 'Send Link'}
               </button>
             </form>
           </>

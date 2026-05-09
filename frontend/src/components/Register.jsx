@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import api from '../api';
+import { useBackendStatus } from '../contexts/BackendContext';
 
 const Register = () => {
   const [name, setName] = useState('');
@@ -10,6 +11,7 @@ const Register = () => {
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
+  const { isAwake } = useBackendStatus();
 
   const handleRegister = async (e) => {
     e.preventDefault();
@@ -85,9 +87,10 @@ const Register = () => {
             placeholder="Full Name"
             value={name}
             onChange={(e) => setName(e.target.value)}
+            disabled={!isAwake}
             required
             style={{
-              width: '100%', padding: '16px', background: 'rgba(255, 255, 255, 0.03)', border: '1px solid rgba(255, 255, 255, 0.1)', borderRadius: '8px', color: '#fff', fontSize: '14px', outline: 'none', boxSizing: 'border-box'
+              width: '100%', padding: '16px', background: 'rgba(255, 255, 255, 0.03)', border: '1px solid rgba(255, 255, 255, 0.1)', borderRadius: '8px', color: '#fff', fontSize: '14px', outline: 'none', boxSizing: 'border-box', opacity: !isAwake ? 0.5 : 1, cursor: !isAwake ? 'not-allowed' : 'text'
             }}
           />
 
@@ -96,9 +99,10 @@ const Register = () => {
             placeholder="Email Address"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            disabled={!isAwake}
             required
             style={{
-              width: '100%', padding: '16px', background: 'rgba(255, 255, 255, 0.03)', border: '1px solid rgba(255, 255, 255, 0.1)', borderRadius: '8px', color: '#fff', fontSize: '14px', outline: 'none', boxSizing: 'border-box'
+              width: '100%', padding: '16px', background: 'rgba(255, 255, 255, 0.03)', border: '1px solid rgba(255, 255, 255, 0.1)', borderRadius: '8px', color: '#fff', fontSize: '14px', outline: 'none', boxSizing: 'border-box', opacity: !isAwake ? 0.5 : 1, cursor: !isAwake ? 'not-allowed' : 'text'
             }}
           />
 
@@ -108,16 +112,18 @@ const Register = () => {
               placeholder="Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              disabled={!isAwake}
               required
               minLength={6}
               style={{
-                width: '100%', padding: '16px 60px 16px 16px', background: 'rgba(255, 255, 255, 0.03)', border: '1px solid rgba(255, 255, 255, 0.1)', borderRadius: '8px', color: '#fff', fontSize: '14px', outline: 'none', boxSizing: 'border-box'
+                width: '100%', padding: '16px 60px 16px 16px', background: 'rgba(255, 255, 255, 0.03)', border: '1px solid rgba(255, 255, 255, 0.1)', borderRadius: '8px', color: '#fff', fontSize: '14px', outline: 'none', boxSizing: 'border-box', opacity: !isAwake ? 0.5 : 1, cursor: !isAwake ? 'not-allowed' : 'text'
               }}
             />
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              style={{ position: 'absolute', right: '16px', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', color: 'rgba(255, 255, 255, 0.4)', cursor: 'pointer', fontSize: '12px', fontWeight: '500' }}
+              disabled={!isAwake}
+              style={{ position: 'absolute', right: '16px', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', color: 'rgba(255, 255, 255, 0.4)', cursor: !isAwake ? 'not-allowed' : 'pointer', fontSize: '12px', fontWeight: '500', opacity: !isAwake ? 0.5 : 1 }}
             >
               {showPassword ? 'Hide' : 'Show'}
             </button>
@@ -125,12 +131,12 @@ const Register = () => {
 
           <button
             type="submit"
-            disabled={loading}
+            disabled={loading || !isAwake}
             style={{
-              width: '100%', padding: '14px', background: 'linear-gradient(90deg, #7c3aed, #9333ea)', border: 'none', borderRadius: '8px', color: '#fff', fontSize: '15px', fontWeight: '600', cursor: loading ? 'not-allowed' : 'pointer', transition: 'opacity 0.2s', marginTop: '12px'
+              width: '100%', padding: '14px', background: 'linear-gradient(90deg, #7c3aed, #9333ea)', border: 'none', borderRadius: '8px', color: '#fff', fontSize: '15px', fontWeight: '600', cursor: (loading || !isAwake) ? 'not-allowed' : 'pointer', transition: 'opacity 0.2s', marginTop: '12px', opacity: (loading || !isAwake) ? 0.6 : 1
             }}
           >
-            {loading ? 'Creating Account...' : 'Join Now'}
+            {!isAwake ? 'Waiting for server...' : loading ? 'Creating Account...' : 'Join Now'}
           </button>
         </form>
       </div>

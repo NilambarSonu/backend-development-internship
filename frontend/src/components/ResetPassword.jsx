@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import api from '../api';
+import { useBackendStatus } from '../contexts/BackendContext';
 
 const ResetPassword = () => {
   const [password, setPassword] = useState('');
@@ -9,6 +10,7 @@ const ResetPassword = () => {
   const [loading, setLoading] = useState(false);
   const { token } = useParams();
   const navigate = useNavigate();
+  const { isAwake } = useBackendStatus();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -95,6 +97,7 @@ const ResetPassword = () => {
               placeholder="Min. 6 characters"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              disabled={!isAwake}
               required
               minLength={6}
               style={{
@@ -108,10 +111,14 @@ const ResetPassword = () => {
                 outline: 'none',
                 boxSizing: 'border-box',
                 transition: 'all 0.2s',
+                opacity: !isAwake ? 0.5 : 1,
+                cursor: !isAwake ? 'not-allowed' : 'text'
               }}
               onFocus={(e) => {
-                e.target.style.borderColor = 'rgba(124,58,237,0.5)';
-                e.target.style.background = 'rgba(255,255,255,0.07)';
+                if (isAwake) {
+                  e.target.style.borderColor = 'rgba(124,58,237,0.5)';
+                  e.target.style.background = 'rgba(255,255,255,0.07)';
+                }
               }}
               onBlur={(e) => {
                 e.target.style.borderColor = 'rgba(255,255,255,0.1)';
@@ -127,6 +134,7 @@ const ResetPassword = () => {
               placeholder="Confirm new password"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
+              disabled={!isAwake}
               required
               style={{
                 width: '100%',
@@ -139,10 +147,14 @@ const ResetPassword = () => {
                 outline: 'none',
                 boxSizing: 'border-box',
                 transition: 'all 0.2s',
+                opacity: !isAwake ? 0.5 : 1,
+                cursor: !isAwake ? 'not-allowed' : 'text'
               }}
               onFocus={(e) => {
-                e.target.style.borderColor = 'rgba(124,58,237,0.5)';
-                e.target.style.background = 'rgba(255,255,255,0.07)';
+                if (isAwake) {
+                  e.target.style.borderColor = 'rgba(124,58,237,0.5)';
+                  e.target.style.background = 'rgba(255,255,255,0.07)';
+                }
               }}
               onBlur={(e) => {
                 e.target.style.borderColor = 'rgba(255,255,255,0.1)';
@@ -153,24 +165,25 @@ const ResetPassword = () => {
 
           <button
             type="submit"
-            disabled={loading}
+            disabled={loading || !isAwake}
             style={{
               width: '100%',
               padding: '15px',
-              background: loading ? 'rgba(124,58,237,0.4)' : 'linear-gradient(135deg, #7c3aed 0%, #4f46e5 100%)',
+              background: (loading || !isAwake) ? 'rgba(124,58,237,0.4)' : 'linear-gradient(135deg, #7c3aed 0%, #4f46e5 100%)',
               border: 'none',
               borderRadius: '12px',
               color: '#ffffff',
               fontSize: '16px',
               fontWeight: '600',
-              cursor: loading ? 'not-allowed' : 'pointer',
+              cursor: (loading || !isAwake) ? 'not-allowed' : 'pointer',
               transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
               boxShadow: '0 8px 24px rgba(124,58,237,0.3)',
+              opacity: (loading || !isAwake) ? 0.7 : 1
             }}
-            onMouseEnter={(e) => { if(!loading) e.target.style.transform = 'translateY(-2px)'; }}
-            onMouseLeave={(e) => { if(!loading) e.target.style.transform = 'translateY(0)'; }}
+            onMouseEnter={(e) => { if(!loading && isAwake) e.target.style.transform = 'translateY(-2px)'; }}
+            onMouseLeave={(e) => { if(!loading && isAwake) e.target.style.transform = 'translateY(0)'; }}
           >
-            {loading ? 'Updating Password...' : 'Update Password'}
+            {!isAwake ? 'Waiting for server...' : loading ? 'Updating Password...' : 'Update Password'}
           </button>
         </form>
       </div>
