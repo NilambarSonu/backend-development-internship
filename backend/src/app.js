@@ -13,7 +13,13 @@ const app = express();
 
 // Middlewares
 app.use(express.json());
-app.use(cors());
+// Configure CORS with credentials support
+app.use(cors({
+  origin: process.env.FRONTEND_URL || '*',
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
 app.use(helmet());
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
@@ -26,7 +32,7 @@ swaggerDocs(app);
 app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/tasks', taskRoutes);
 
-// Health Check Route
+// Health Check Route (Simple and fast)
 app.get('/api/v1/health', (req, res) => {
   res.status(200).json({ status: 'ok', message: 'Backend is awake!' });
 });

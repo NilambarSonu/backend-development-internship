@@ -9,30 +9,56 @@ const BackendWaker = ({ children }) => {
 
   useEffect(() => {
     let interval;
+    let timeout;
     const startTime = Date.now();
+    const MAX_WAIT_TIME = 60000; // 60 seconds max
 
     const pingBackend = async () => {
       try {
-        const response = await api.get('/health', { timeout: 5000 });
+        const response = await api.get('/health', { timeout: 8000 });
         if (response.status === 200) {
+          console.log('✅ Backend connected successfully!');
           setIsAwake(true);
+          clearInterval(interval);
+          clearTimeout(timeout);
         }
       } catch (error) {
-        console.log("Backend is still waking up...", error.message);
+        const elapsed = Date.now() - startTime;
+        console.log(`⏱️ Backend check failed (${Math.floor(elapsed / 1000)}s):`, error.message);
+        
+        // If we've waited more than 60 seconds, show the page anyway
+        if (elapsed > MAX_WAIT_TIME) {
+          console.warn('⚠️ Timeout reached. Showing page anyway.');
+          setIsAwake(true);
+          clearInterval(interval);
+          return;
+        }
+        
         // Update loading time for the UI
-        setLoadingTime(Math.floor((Date.now() - startTime) / 1000));
+        setLoadingTime(Math.floor(elapsed / 1000));
+        
+        // Retry after 3 seconds
         setTimeout(pingBackend, 3000);
       }
     };
 
     pingBackend();
 
-    // Just for a smooth timer feel
+    // Update timer every second
     interval = setInterval(() => {
       setLoadingTime(Math.floor((Date.now() - startTime) / 1000));
     }, 1000);
 
-    return () => clearInterval(interval);
+    // Safety timeout - force show after 70 seconds
+    timeout = setTimeout(() => {
+      console.warn('🔴 Backend health check timeout - forcing page load');
+      setIsAwake(true);
+    }, 70000);
+
+    return () => {
+      clearInterval(interval);
+      clearTimeout(timeout);
+    };
   }, []);
 
   return (
@@ -56,7 +82,7 @@ const BackendWaker = ({ children }) => {
                 Connecting to backend... {loadingTime}s
               </span>
               <span className="text-xs text-yellow-700">
-                Input fields will be enabled once connected
+                {loadingTime > 60 ? '⚠️ Loading anyway...' : 'Input fields will be enabled once connected'}
               </span>
             </div>
           </div>
