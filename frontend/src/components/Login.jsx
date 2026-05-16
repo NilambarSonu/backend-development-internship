@@ -84,6 +84,10 @@ const Login = () => {
         border: '1px solid rgba(255, 255, 255, 0.05)',
         boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)',
       }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '24px' }}>
+          <img src="/favicon.png" alt="Logo" style={{ width: '40px', height: '40px', borderRadius: '10px' }} />
+          <h1 style={{ color: '#ffffff', fontSize: '24px', fontWeight: '800', margin: 0, letterSpacing: '-0.5px' }}>Task Management</h1>
+        </div>
         <h2 style={{ color: '#ffffff', fontSize: '32px', fontWeight: '500', marginBottom: '8px', letterSpacing: '-0.02em' }}>Sign In</h2>
         <p style={{ color: 'rgba(255, 255, 255, 0.5)', fontSize: '14px', marginBottom: '32px' }}>Keep it all together and you'll be fine</p>
 
@@ -147,7 +151,7 @@ const Login = () => {
       </div>
 
       <p style={{ marginTop: '24px', textAlign: 'center', color: 'rgba(255, 255, 255, 0.5)', fontSize: '14px', position: 'relative', zIndex: 10 }}>
-        New to TaskFlow <Link to="/register" style={{ color: '#9333ea', fontWeight: '600', textDecoration: 'none' }}>Join Now</Link>
+        New to Task Management <Link to="/register" style={{ color: '#9333ea', fontWeight: '600', textDecoration: 'none' }}>Join Now</Link>
       </p>
     </div>
   );

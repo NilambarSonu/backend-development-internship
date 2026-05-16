@@ -186,10 +186,14 @@ const Dashboard = () => {
         width: '260px', 
         background: '#000', 
         borderRight: '0.5px solid rgba(255,255,255,0.1)', 
-        display: 'flex', 
+        display: 'flex',
         flexDirection: 'column',
         padding: '20px 0'
       }}>
+        <div style={{ padding: '0 20px 20px', display: 'flex', alignItems: 'center', gap: '12px', borderBottom: '0.5px solid rgba(255,255,255,0.1)', marginBottom: '20px' }}>
+          <img src="/favicon.png" alt="Logo" style={{ width: '32px', height: '32px', borderRadius: '8px' }} />
+          <span style={{ fontSize: '18px', fontWeight: '800', letterSpacing: '-0.5px', background: 'linear-gradient(135deg, #fff, rgba(255,255,255,0.7))', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Task Management</span>
+        </div>
         <div style={{ padding: '0 20px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <div style={{ width: '28px', height: '28px', borderRadius: '50%', background: 'linear-gradient(135deg, #a855f7, #6366f1)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '12px', fontWeight: 'bold' }}>

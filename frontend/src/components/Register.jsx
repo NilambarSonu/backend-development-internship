@@ -72,8 +72,12 @@ const Register = () => {
         border: '1px solid rgba(255, 255, 255, 0.05)',
         boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)',
       }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '24px' }}>
+          <img src="/favicon.png" alt="Logo" style={{ width: '40px', height: '40px', borderRadius: '10px' }} />
+          <h1 style={{ color: '#ffffff', fontSize: '24px', fontWeight: '800', margin: 0, letterSpacing: '-0.5px' }}>Task Management</h1>
+        </div>
         <h2 style={{ color: '#ffffff', fontSize: '32px', fontWeight: '500', marginBottom: '8px', letterSpacing: '-0.02em' }}>Join Now</h2>
-        <p style={{ color: 'rgba(255, 255, 255, 0.5)', fontSize: '14px', marginBottom: '32px' }}>Start your journey with TaskFlow today</p>
+        <p style={{ color: 'rgba(255, 255, 255, 0.5)', fontSize: '14px', marginBottom: '32px' }}>Start your journey with Task Management today</p>
 
         {error && (
           <div style={{ marginBottom: '20px', color: '#ff453a', fontSize: '13px', textAlign: 'center' }}>
